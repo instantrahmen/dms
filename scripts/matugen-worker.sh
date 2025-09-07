@@ -2,12 +2,14 @@
 set -euo pipefail
 
 if [ $# -lt 3 ]; then
-    echo "Usage: $0 STATE_DIR SHELL_DIR --run" >&2
+    echo "Usage: $0 STATE_DIR SHELL_DIR --run SCHEME" >&2
     exit 1
 fi
 
 STATE_DIR="$1"
 SHELL_DIR="$2"
+# SCHEME="scheme-tonal-spot"
+SCHEME="$4"
 
 if [ ! -d "$STATE_DIR" ]; then
     echo "Error: STATE_DIR '$STATE_DIR' does not exist" >&2
@@ -22,7 +24,7 @@ fi
 shift 2  # Remove STATE_DIR and SHELL_DIR from arguments
 
 if [[ "${1:-}" != "--run" ]]; then
-  echo "usage: $0 STATE_DIR SHELL_DIR --run" >&2
+  echo "usage: $0 STATE_DIR SHELL_DIR --run SCHEME" >&2
   exit 1
 fi
 
@@ -96,13 +98,13 @@ build_once() {
   case "$kind" in
     image)
       [[ -f "$value" ]] || { echo "wallpaper not found: $value" >&2; popd >/dev/null; return 2; }
-      JSON=$(matugen -c "$TMP_CFG" --json hex image "$value" "${MAT_MODE[@]}")
-      matugen -c "$TMP_CFG" image "$value" "${MAT_MODE[@]}" >/dev/null
+      JSON=$(matugen -t $SCHEME -c "$TMP_CFG" --json hex image "$value" "${MAT_MODE[@]}")
+      matugen -t $SCHEME -c "$TMP_CFG" image "$value" "${MAT_MODE[@]}" >/dev/null
       ;;
     hex)
       [[ "$value" =~ ^#[0-9A-Fa-f]{6}$ ]] || { echo "invalid hex: $value" >&2; popd >/dev/null; return 2; }
-      JSON=$(matugen -c "$TMP_CFG" --json hex color hex "$value" "${MAT_MODE[@]}")
-      matugen -c "$TMP_CFG" color hex "$value" "${MAT_MODE[@]}" >/dev/null
+      JSON=$(matugen  -t $SCHEME -c "$TMP_CFG" --json hex color hex "$value" "${MAT_MODE[@]}")
+      matugen -t $SCHEME -c "$TMP_CFG" color hex "$value" "${MAT_MODE[@]}" >/dev/null
       ;;
     *)
       echo "unknown kind: $kind" >&2; popd >/dev/null; return 2;;
@@ -133,10 +135,10 @@ build_once() {
   if [[ -s "$TMP_CONTENT_CFG" ]] && grep -q '\[templates\.' "$TMP_CONTENT_CFG"; then
     case "$kind" in
       image)
-        matugen -c "$TMP_CONTENT_CFG" image "$value" "${MAT_MODE[@]}" >/dev/null
+        matugen -t $SCHEME -c "$TMP_CONTENT_CFG" image "$value" "${MAT_MODE[@]}" >/dev/null
         ;;
       hex)
-        matugen -c "$TMP_CONTENT_CFG" color hex "$value" "${MAT_MODE[@]}" >/dev/null
+        matugen -t $SCHEME -c "$TMP_CONTENT_CFG" color hex "$value" "${MAT_MODE[@]}" >/dev/null
         ;;
     esac
   fi
