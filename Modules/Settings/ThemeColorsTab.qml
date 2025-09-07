@@ -13,76 +13,55 @@ Item {
 
     property var cachedFontFamilies: []
     property var cachedMonoFamilies: []
+    property var availableSchemes: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot"]
     property bool fontsEnumerated: false
+    property string selectedScheme: SettingsData.currentScheme
 
     function enumerateFonts() {
-        var fonts = ["Default"]
-        var availableFonts = Qt.fontFamilies()
-        var rootFamilies = []
-        var seenFamilies = new Set()
+        var fonts = ["Default"];
+        var availableFonts = Qt.fontFamilies();
+        var rootFamilies = [];
+        var seenFamilies = new Set();
         for (var i = 0; i < availableFonts.length; i++) {
-            var fontName = availableFonts[i]
+            var fontName = availableFonts[i];
             if (fontName.startsWith("."))
-                continue
-
+                continue;
             if (fontName === SettingsData.defaultFontFamily)
-                continue
-
-            var rootName = fontName.replace(
-                        / (Thin|Extra Light|Light|Regular|Medium|Semi Bold|Demi Bold|Bold|Extra Bold|Black|Heavy)$/i,
-                        "").replace(
-                        / (Italic|Oblique|Condensed|Extended|Narrow|Wide)$/i,
-                        "").replace(/ (UI|Display|Text|Mono|Sans|Serif)$/i,
-                                    function (match, suffix) {
-                                        return match
-                                    }).trim()
+                continue;
+            var rootName = fontName.replace(/ (Thin|Extra Light|Light|Regular|Medium|Semi Bold|Demi Bold|Bold|Extra Bold|Black|Heavy)$/i, "").replace(/ (Italic|Oblique|Condensed|Extended|Narrow|Wide)$/i, "").replace(/ (UI|Display|Text|Mono|Sans|Serif)$/i, function (match, suffix) {
+                return match;
+            }).trim();
             if (!seenFamilies.has(rootName) && rootName !== "") {
-                seenFamilies.add(rootName)
-                rootFamilies.push(rootName)
+                seenFamilies.add(rootName);
+                rootFamilies.push(rootName);
             }
         }
-        cachedFontFamilies = fonts.concat(rootFamilies.sort())
-        var monoFonts = ["Default"]
-        var monoFamilies = []
-        var seenMonoFamilies = new Set()
+        cachedFontFamilies = fonts.concat(rootFamilies.sort());
+        var monoFonts = ["Default"];
+        var monoFamilies = [];
+        var seenMonoFamilies = new Set();
         for (var j = 0; j < availableFonts.length; j++) {
-            var fontName2 = availableFonts[j]
+            var fontName2 = availableFonts[j];
             if (fontName2.startsWith("."))
-                continue
-
+                continue;
             if (fontName2 === SettingsData.defaultMonoFontFamily)
-                continue
-
-            var lowerName = fontName2.toLowerCase()
-            if (lowerName.includes("mono") || lowerName.includes(
-                        "code") || lowerName.includes(
-                        "console") || lowerName.includes(
-                        "terminal") || lowerName.includes(
-                        "courier") || lowerName.includes(
-                        "dejavu sans mono") || lowerName.includes(
-                        "jetbrains") || lowerName.includes(
-                        "fira") || lowerName.includes(
-                        "hack") || lowerName.includes(
-                        "source code") || lowerName.includes(
-                        "ubuntu mono") || lowerName.includes("cascadia")) {
-                var rootName2 = fontName2.replace(
-                            / (Thin|Extra Light|Light|Regular|Medium|Semi Bold|Demi Bold|Bold|Extra Bold|Black|Heavy)$/i,
-                            "").replace(
-                            / (Italic|Oblique|Condensed|Extended|Narrow|Wide)$/i,
-                            "").trim()
+                continue;
+            var lowerName = fontName2.toLowerCase();
+            if (lowerName.includes("mono") || lowerName.includes("code") || lowerName.includes("console") || lowerName.includes("terminal") || lowerName.includes("courier") || lowerName.includes("dejavu sans mono") || lowerName.includes("jetbrains") || lowerName.includes("fira") || lowerName.includes("hack") || lowerName.includes("source code") || lowerName.includes("ubuntu mono") || lowerName.includes("cascadia")) {
+                var rootName2 = fontName2.replace(/ (Thin|Extra Light|Light|Regular|Medium|Semi Bold|Demi Bold|Bold|Extra Bold|Black|Heavy)$/i, "").replace(/ (Italic|Oblique|Condensed|Extended|Narrow|Wide)$/i, "").trim();
                 if (!seenMonoFamilies.has(rootName2) && rootName2 !== "") {
-                    seenMonoFamilies.add(rootName2)
-                    monoFamilies.push(rootName2)
+                    seenMonoFamilies.add(rootName2);
+                    monoFamilies.push(rootName2);
                 }
             }
         }
-        cachedMonoFamilies = monoFonts.concat(monoFamilies.sort())
+        cachedMonoFamilies = monoFonts.concat(monoFamilies.sort());
     }
 
     Component.onCompleted: {
         if (!fontsEnumerated) {
-            enumerateFonts()
-            fontsEnumerated = true
+            enumerateFonts();
+            fontsEnumerated = true;
         }
     }
 
@@ -104,10 +83,8 @@ Item {
                 width: parent.width
                 height: themeSection.implicitHeight + Theme.spacingL * 2
                 radius: Theme.cornerRadius
-                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g,
-                               Theme.surfaceVariant.b, 0.3)
-                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g,
-                                      Theme.outline.b, 0.2)
+                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g, Theme.surfaceVariant.b, 0.3)
+                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.2)
                 border.width: 1
 
                 Column {
@@ -152,7 +129,7 @@ Item {
                         StyledText {
                             text: {
                                 if (Theme.currentTheme === Theme.dynamic)
-                                    return "Wallpaper-based dynamic colors"
+                                    return "Wallpaper-based dynamic colors";
 
                                 var descriptions = {
                                     "blue": "Material blue inspired by modern interfaces",
@@ -165,8 +142,8 @@ Item {
                                     "pink": "Vibrant pink for expression",
                                     "amber": "Warm amber for comfort",
                                     "coral": "Soft coral for gentle warmth"
-                                }
-                                return descriptions[Theme.currentThemeName] || "Select a theme"
+                                };
+                                return descriptions[Theme.currentThemeName] || "Select a theme";
                             }
                             font.pixelSize: Theme.fontSizeSmall
                             color: Theme.surfaceVariantText
@@ -194,10 +171,8 @@ Item {
                                     radius: 16
                                     color: Theme.getThemeColors(themeName).primary
                                     border.color: Theme.outline
-                                    border.width: (Theme.currentThemeName === themeName
-                                                   && Theme.currentTheme !== Theme.dynamic) ? 2 : 1
-                                    scale: (Theme.currentThemeName === themeName
-                                            && Theme.currentTheme !== Theme.dynamic) ? 1.1 : 1
+                                    border.width: (Theme.currentThemeName === themeName && Theme.currentTheme !== Theme.dynamic) ? 2 : 1
+                                    scale: (Theme.currentThemeName === themeName && Theme.currentTheme !== Theme.dynamic) ? 1.1 : 1
 
                                     Rectangle {
                                         width: nameText.contentWidth + Theme.spacingS * 2
@@ -228,7 +203,7 @@ Item {
                                         hoverEnabled: true
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: {
-                                            Theme.switchTheme(themeName)
+                                            Theme.switchTheme(themeName);
                                         }
                                     }
 
@@ -296,7 +271,7 @@ Item {
                                         hoverEnabled: true
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: {
-                                            Theme.switchTheme(themeName)
+                                            Theme.switchTheme(themeName);
                                         }
                                     }
 
@@ -331,26 +306,18 @@ Item {
                                 height: 40
                                 radius: 20
                                 color: {
-                                    if (ToastService.wallpaperErrorStatus === "error"
-                                            || ToastService.wallpaperErrorStatus === "matugen_missing")
-                                        return Qt.rgba(Theme.error.r,
-                                                       Theme.error.g,
-                                                       Theme.error.b, 0.12)
+                                    if (ToastService.wallpaperErrorStatus === "error" || ToastService.wallpaperErrorStatus === "matugen_missing")
+                                        return Qt.rgba(Theme.error.r, Theme.error.g, Theme.error.b, 0.12);
                                     else
-                                        return Qt.rgba(Theme.surfaceVariant.r,
-                                                       Theme.surfaceVariant.g,
-                                                       Theme.surfaceVariant.b, 0.3)
+                                        return Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g, Theme.surfaceVariant.b, 0.3);
                                 }
                                 border.color: {
-                                    if (ToastService.wallpaperErrorStatus === "error"
-                                            || ToastService.wallpaperErrorStatus === "matugen_missing")
-                                        return Qt.rgba(Theme.error.r,
-                                                       Theme.error.g,
-                                                       Theme.error.b, 0.5)
+                                    if (ToastService.wallpaperErrorStatus === "error" || ToastService.wallpaperErrorStatus === "matugen_missing")
+                                        return Qt.rgba(Theme.error.r, Theme.error.g, Theme.error.b, 0.5);
                                     else if (Theme.currentThemeName === "dynamic")
-                                        return Theme.primary
+                                        return Theme.primary;
                                     else
-                                        return Theme.outline
+                                        return Theme.outline;
                                 }
                                 border.width: (Theme.currentThemeName === "dynamic") ? 2 : 1
                                 scale: (Theme.currentThemeName === "dynamic") ? 1.1 : (autoMouseArea.containsMouse ? 1.02 : 1)
@@ -360,210 +327,242 @@ Item {
                                     spacing: Theme.spacingS
 
                                     DankIcon {
-                                    name: {
-                                        if (ToastService.wallpaperErrorStatus === "error"
-                                                || ToastService.wallpaperErrorStatus
-                                                === "matugen_missing")
-                                            return "error"
-                                        else
-                                            return "palette"
+                                        name: {
+                                            if (ToastService.wallpaperErrorStatus === "error" || ToastService.wallpaperErrorStatus === "matugen_missing")
+                                                return "error";
+                                            else
+                                                return "palette";
+                                        }
+                                        size: 16
+                                        color: {
+                                            if (ToastService.wallpaperErrorStatus === "error" || ToastService.wallpaperErrorStatus === "matugen_missing")
+                                                return Theme.error;
+                                            else
+                                                return Theme.surfaceText;
+                                        }
+                                        anchors.verticalCenter: parent.verticalCenter
                                     }
-                                    size: 16
-                                    color: {
-                                        if (ToastService.wallpaperErrorStatus === "error"
-                                                || ToastService.wallpaperErrorStatus
-                                                === "matugen_missing")
-                                            return Theme.error
-                                        else
-                                            return Theme.surfaceText
+
+                                    StyledText {
+                                        text: {
+                                            if (ToastService.wallpaperErrorStatus === "error")
+                                                return "Error";
+                                            else if (ToastService.wallpaperErrorStatus === "matugen_missing")
+                                                return "No matugen";
+                                            else
+                                                return "Auto";
+                                        }
+                                        font.pixelSize: Theme.fontSizeMedium
+                                        color: {
+                                            if (ToastService.wallpaperErrorStatus === "error" || ToastService.wallpaperErrorStatus === "matugen_missing")
+                                                return Theme.error;
+                                            else
+                                                return Theme.surfaceText;
+                                        }
+                                        font.weight: Font.Medium
+                                        anchors.verticalCenter: parent.verticalCenter
                                     }
-                                    anchors.verticalCenter: parent.verticalCenter
                                 }
 
-                                StyledText {
-                                    text: {
-                                        if (ToastService.wallpaperErrorStatus === "error")
-                                            return "Error"
-                                        else if (ToastService.wallpaperErrorStatus
-                                                 === "matugen_missing")
-                                            return "No matugen"
-                                        else
-                                            return "Auto"
-                                    }
-                                    font.pixelSize: Theme.fontSizeMedium
-                                    color: {
-                                        if (ToastService.wallpaperErrorStatus === "error"
-                                                || ToastService.wallpaperErrorStatus
-                                                === "matugen_missing")
-                                            return Theme.error
-                                        else
-                                            return Theme.surfaceText
-                                    }
-                                    font.weight: Font.Medium
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                            }
+                                MouseArea {
+                                    id: autoMouseArea
 
-                            MouseArea {
-                                id: autoMouseArea
-
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    if (ToastService.wallpaperErrorStatus === "matugen_missing")
-                                        ToastService.showError(
-                                                    "matugen not found - install matugen package for dynamic theming")
-                                    else if (ToastService.wallpaperErrorStatus === "error")
-                                        ToastService.showError(
-                                                    "Wallpaper processing failed - check wallpaper path")
-                                    else
-                                        Theme.switchTheme(Theme.dynamic)
-                                }
-                            }
-
-                            Rectangle {
-                                width: autoTooltipText.contentWidth + Theme.spacingM * 2
-                                height: autoTooltipText.contentHeight + Theme.spacingS * 2
-                                color: Theme.surfaceContainer
-                                border.color: Theme.outline
-                                border.width: 1
-                                radius: Theme.cornerRadius
-                                anchors.bottom: parent.top
-                                anchors.bottomMargin: Theme.spacingS
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                visible: autoMouseArea.containsMouse
-                                         && (Theme.currentTheme !== Theme.dynamic
-                                             || ToastService.wallpaperErrorStatus === "error"
-                                             || ToastService.wallpaperErrorStatus
-                                             === "matugen_missing")
-
-                                StyledText {
-                                    id: autoTooltipText
-
-                                    text: {
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
                                         if (ToastService.wallpaperErrorStatus === "matugen_missing")
-                                            return "Install matugen package for dynamic themes"
+                                            ToastService.showError("matugen not found - install matugen package for dynamic theming");
+                                        else if (ToastService.wallpaperErrorStatus === "error")
+                                            ToastService.showError("Wallpaper processing failed - check wallpaper path");
                                         else
-                                            return "Dynamic wallpaper-based colors"
+                                            Theme.switchTheme(Theme.dynamic);
                                     }
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    color: (ToastService.wallpaperErrorStatus === "error"
-                                            || ToastService.wallpaperErrorStatus
-                                            === "matugen_missing") ? Theme.error : Theme.surfaceText
-                                    anchors.centerIn: parent
-                                    wrapMode: Text.WordWrap
-                                    width: Math.min(implicitWidth, 250)
-                                    horizontalAlignment: Text.AlignHCenter
-                                }
-                            }
-
-                            Behavior on scale {
-                                NumberAnimation {
-                                    duration: Theme.shortDuration
-                                    easing.type: Theme.emphasizedEasing
-                                }
-                            }
-
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: Theme.mediumDuration
-                                    easing.type: Theme.standardEasing
-                                }
-                            }
-
-                            Behavior on border.color {
-                                ColorAnimation {
-                                    duration: Theme.mediumDuration
-                                    easing.type: Theme.standardEasing
-                                }
-                            }
-                        }
-
-                        Rectangle {
-                            width: 120
-                            height: 40
-                            radius: 20
-                            color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g, Theme.surfaceVariant.b, 0.3)
-                            border.color: (Theme.currentThemeName === "custom") ? Theme.primary : Theme.outline
-                            border.width: (Theme.currentThemeName === "custom") ? 2 : 1
-                            scale: (Theme.currentThemeName === "custom") ? 1.1 : (customMouseArea.containsMouse ? 1.02 : 1)
-
-                            Row {
-                                anchors.centerIn: parent
-                                spacing: Theme.spacingS
-
-                                DankIcon {
-                                    name: "folder_open"
-                                    size: 16
-                                    color: Theme.surfaceText
-                                    anchors.verticalCenter: parent.verticalCenter
                                 }
 
-                                StyledText {
-                                    text: "Custom"
-                                    font.pixelSize: Theme.fontSizeMedium
-                                    color: Theme.surfaceText
-                                    font.weight: Font.Medium
-                                    anchors.verticalCenter: parent.verticalCenter
+                                Rectangle {
+                                    width: autoTooltipText.contentWidth + Theme.spacingM * 2
+                                    height: autoTooltipText.contentHeight + Theme.spacingS * 2
+                                    color: Theme.surfaceContainer
+                                    border.color: Theme.outline
+                                    border.width: 1
+                                    radius: Theme.cornerRadius
+                                    anchors.bottom: parent.top
+                                    anchors.bottomMargin: Theme.spacingS
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    visible: autoMouseArea.containsMouse && (Theme.currentTheme !== Theme.dynamic || ToastService.wallpaperErrorStatus === "error" || ToastService.wallpaperErrorStatus === "matugen_missing")
+
+                                    StyledText {
+                                        id: autoTooltipText
+
+                                        text: {
+                                            if (ToastService.wallpaperErrorStatus === "matugen_missing")
+                                                return "Install matugen package for dynamic themes";
+                                            else
+                                                return "Dynamic wallpaper-based colors";
+                                        }
+                                        font.pixelSize: Theme.fontSizeSmall
+                                        color: (ToastService.wallpaperErrorStatus === "error" || ToastService.wallpaperErrorStatus === "matugen_missing") ? Theme.error : Theme.surfaceText
+                                        anchors.centerIn: parent
+                                        wrapMode: Text.WordWrap
+                                        width: Math.min(implicitWidth, 250)
+                                        horizontalAlignment: Text.AlignHCenter
+                                    }
                                 }
-                            }
 
-                            MouseArea {
-                                id: customMouseArea
+                                Behavior on scale {
+                                    NumberAnimation {
+                                        duration: Theme.shortDuration
+                                        easing.type: Theme.emphasizedEasing
+                                    }
+                                }
 
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    fileBrowserModal.open()
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: Theme.mediumDuration
+                                        easing.type: Theme.standardEasing
+                                    }
+                                }
+
+                                Behavior on border.color {
+                                    ColorAnimation {
+                                        duration: Theme.mediumDuration
+                                        easing.type: Theme.standardEasing
+                                    }
                                 }
                             }
 
                             Rectangle {
-                                width: customTooltipText.contentWidth + Theme.spacingM * 2
-                                height: customTooltipText.contentHeight + Theme.spacingS * 2
-                                color: Theme.surfaceContainer
-                                border.color: Theme.outline
-                                border.width: 1
-                                radius: Theme.cornerRadius
-                                anchors.bottom: parent.top
-                                anchors.bottomMargin: Theme.spacingS
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                visible: customMouseArea.containsMouse
+                                width: 120
+                                height: 40
+                                radius: 20
+                                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g, Theme.surfaceVariant.b, 0.3)
+                                border.color: (Theme.currentThemeName === "custom") ? Theme.primary : Theme.outline
+                                border.width: (Theme.currentThemeName === "custom") ? 2 : 1
+                                scale: (Theme.currentThemeName === "custom") ? 1.1 : (customMouseArea.containsMouse ? 1.02 : 1)
 
-                                StyledText {
-                                    id: customTooltipText
-                                    text: {
-                                        if (Theme.currentThemeName === "custom")
-                                            return SettingsData.customThemeFile || "Custom theme loaded"
-                                        else
-                                            return "Load custom theme from JSON file"
-                                    }
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    color: Theme.surfaceText
+                                Row {
                                     anchors.centerIn: parent
-                                    wrapMode: Text.WordWrap
-                                    width: Math.min(implicitWidth, 250)
-                                    horizontalAlignment: Text.AlignHCenter
+                                    spacing: Theme.spacingS
+
+                                    DankIcon {
+                                        name: "folder_open"
+                                        size: 16
+                                        color: Theme.surfaceText
+                                        anchors.verticalCenter: parent.verticalCenter
+                                    }
+
+                                    StyledText {
+                                        text: "Custom"
+                                        font.pixelSize: Theme.fontSizeMedium
+                                        color: Theme.surfaceText
+                                        font.weight: Font.Medium
+                                        anchors.verticalCenter: parent.verticalCenter
+                                    }
+                                }
+
+                                MouseArea {
+                                    id: customMouseArea
+
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        fileBrowserModal.open();
+                                    }
+                                }
+
+                                Rectangle {
+                                    width: customTooltipText.contentWidth + Theme.spacingM * 2
+                                    height: customTooltipText.contentHeight + Theme.spacingS * 2
+                                    color: Theme.surfaceContainer
+                                    border.color: Theme.outline
+                                    border.width: 1
+                                    radius: Theme.cornerRadius
+                                    anchors.bottom: parent.top
+                                    anchors.bottomMargin: Theme.spacingS
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    visible: customMouseArea.containsMouse
+
+                                    StyledText {
+                                        id: customTooltipText
+                                        text: {
+                                            if (Theme.currentThemeName === "custom")
+                                                return SettingsData.customThemeFile || "Custom theme loaded";
+                                            else
+                                                return "Load custom theme from JSON file";
+                                        }
+                                        font.pixelSize: Theme.fontSizeSmall
+                                        color: Theme.surfaceText
+                                        anchors.centerIn: parent
+                                        wrapMode: Text.WordWrap
+                                        width: Math.min(implicitWidth, 250)
+                                        horizontalAlignment: Text.AlignHCenter
+                                    }
+                                }
+
+                                Behavior on scale {
+                                    NumberAnimation {
+                                        duration: Theme.shortDuration
+                                        easing.type: Theme.emphasizedEasing
+                                    }
+                                }
+
+                                Behavior on border.width {
+                                    NumberAnimation {
+                                        duration: Theme.shortDuration
+                                        easing.type: Theme.emphasizedEasing
+                                    }
                                 }
                             }
+                        } // Close Row
+                    }
+                }
+            }
 
-                            Behavior on scale {
-                                NumberAnimation {
-                                    duration: Theme.shortDuration
-                                    easing.type: Theme.emphasizedEasing
-                                }
+            StyledRect {
+                width: parent.width
+                height: iconThemeSection.implicitHeight + Theme.spacingL * 2
+                radius: Theme.cornerRadius
+                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g, Theme.surfaceVariant.b, 0.3)
+                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.2)
+                border.width: 1
+
+                Column {
+                    id: "schemeSection"
+
+                    anchors.fill: parent
+                    anchors.margins: Theme.spacingL
+                    spacing: Theme.spacingM
+
+                    Row {
+                        width: parent.width
+                        spacing: Theme.spacingXS
+
+                        DankIcon {
+                            name: "image"
+                            size: Theme.iconSize
+                            color: Theme.primary
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        DankDropdown {
+                            width: parent.width - Theme.iconSize - Theme.spacingXS
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "Matugen Scheme"
+                            description: "Change how matugen extracts colors from images"
+                            currentValue: SettingsData.currentScheme
+                            enableFuzzySearch: false
+                            popupWidthOffset: 100
+                            maxPopupHeight: 236
+                            options: {
+                                // return ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot"];
+                                return [...availableSchemes];
                             }
-
-                            Behavior on border.width {
-                                NumberAnimation {
-                                    duration: Theme.shortDuration
-                                    easing.type: Theme.emphasizedEasing
-                                }
+                            onValueChanged: value => {
+                                Theme.switchCurrentScheme(value);
                             }
                         }
-                        } // Close Row
                     }
                 }
             }
@@ -573,10 +572,8 @@ Item {
                 width: parent.width
                 height: transparencySection.implicitHeight + Theme.spacingL * 2
                 radius: Theme.cornerRadius
-                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g,
-                               Theme.surfaceVariant.b, 0.3)
-                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g,
-                                      Theme.outline.b, 0.2)
+                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g, Theme.surfaceVariant.b, 0.3)
+                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.2)
                 border.width: 1
 
                 Column {
@@ -620,17 +617,15 @@ Item {
                         DankSlider {
                             width: parent.width
                             height: 24
-                            value: Math.round(
-                                       SettingsData.topBarTransparency * 100)
+                            value: Math.round(SettingsData.topBarTransparency * 100)
                             minimum: 0
                             maximum: 100
                             unit: ""
                             showValue: true
                             wheelEnabled: false
                             onSliderValueChanged: newValue => {
-                                                      SettingsData.setTopBarTransparency(
-                                                          newValue / 100)
-                                                  }
+                                SettingsData.setTopBarTransparency(newValue / 100);
+                            }
                         }
                     }
 
@@ -648,17 +643,15 @@ Item {
                         DankSlider {
                             width: parent.width
                             height: 24
-                            value: Math.round(
-                                       SettingsData.topBarWidgetTransparency * 100)
+                            value: Math.round(SettingsData.topBarWidgetTransparency * 100)
                             minimum: 0
                             maximum: 100
                             unit: ""
                             showValue: true
                             wheelEnabled: false
                             onSliderValueChanged: newValue => {
-                                                      SettingsData.setTopBarWidgetTransparency(
-                                                          newValue / 100)
-                                                  }
+                                SettingsData.setTopBarWidgetTransparency(newValue / 100);
+                            }
                         }
                     }
 
@@ -676,17 +669,15 @@ Item {
                         DankSlider {
                             width: parent.width
                             height: 24
-                            value: Math.round(
-                                       SettingsData.popupTransparency * 100)
+                            value: Math.round(SettingsData.popupTransparency * 100)
                             minimum: 0
                             maximum: 100
                             unit: ""
                             showValue: true
                             wheelEnabled: false
                             onSliderValueChanged: newValue => {
-                                                      SettingsData.setPopupTransparency(
-                                                          newValue / 100)
-                                                  }
+                                SettingsData.setPopupTransparency(newValue / 100);
+                            }
                         }
                     }
                 }
@@ -697,10 +688,8 @@ Item {
                 width: parent.width
                 height: warningText.implicitHeight + Theme.spacingM * 2
                 radius: Theme.cornerRadius
-                color: Qt.rgba(Theme.warning.r, Theme.warning.g,
-                               Theme.warning.b, 0.12)
-                border.color: Qt.rgba(Theme.warning.r, Theme.warning.g,
-                                      Theme.warning.b, 0.3)
+                color: Qt.rgba(Theme.warning.r, Theme.warning.g, Theme.warning.b, 0.12)
+                border.color: Qt.rgba(Theme.warning.r, Theme.warning.g, Theme.warning.b, 0.3)
                 border.width: 1
 
                 Row {
@@ -731,10 +720,8 @@ Item {
                 width: parent.width
                 height: iconThemeSection.implicitHeight + Theme.spacingL * 2
                 radius: Theme.cornerRadius
-                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g,
-                               Theme.surfaceVariant.b, 0.3)
-                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g,
-                                      Theme.outline.b, 0.2)
+                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g, Theme.surfaceVariant.b, 0.3)
+                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.2)
                 border.width: 1
 
                 Column {
@@ -765,17 +752,15 @@ Item {
                             popupWidthOffset: 100
                             maxPopupHeight: 236
                             options: {
-                                SettingsData.detectAvailableIconThemes()
-                                return SettingsData.availableIconThemes
+                                SettingsData.detectAvailableIconThemes();
+                                return SettingsData.availableIconThemes;
                             }
                             onValueChanged: value => {
-                                                SettingsData.setIconTheme(value)
-                                                if (Quickshell.env("QT_QPA_PLATFORMTHEME") != "gtk3" &&
-                                                    Quickshell.env("QT_QPA_PLATFORMTHEME") != "qt6ct" &&
-                                                    Quickshell.env("QT_QPA_PLATFORMTHEME_QT6") != "qt6ct") {
-                                                    ToastService.showError("Missing Environment Variables", "You need to set either:\nQT_QPA_PLATFORMTHEME=gtk3 OR\nQT_QPA_PLATFORMTHEME=qt6ct\nas environment variables, and then restart the shell.\n\nqt6ct requires qt6ct-kde to be installed.")
-                                                }
-                                            }
+                                SettingsData.setIconTheme(value);
+                                if (Quickshell.env("QT_QPA_PLATFORMTHEME") != "gtk3" && Quickshell.env("QT_QPA_PLATFORMTHEME") != "qt6ct" && Quickshell.env("QT_QPA_PLATFORMTHEME_QT6") != "qt6ct") {
+                                    ToastService.showError("Missing Environment Variables", "You need to set either:\nQT_QPA_PLATFORMTHEME=gtk3 OR\nQT_QPA_PLATFORMTHEME=qt6ct\nas environment variables, and then restart the shell.\n\nqt6ct requires qt6ct-kde to be installed.");
+                                }
+                            }
                         }
                     }
                 }
@@ -786,10 +771,8 @@ Item {
                 width: parent.width
                 height: systemThemingSection.implicitHeight + Theme.spacingL * 2
                 radius: Theme.cornerRadius
-                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g,
-                               Theme.surfaceVariant.b, 0.3)
-                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g,
-                                      Theme.outline.b, 0.2)
+                color: Qt.rgba(Theme.surfaceVariant.r, Theme.surfaceVariant.g, Theme.surfaceVariant.b, 0.3)
+                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.2)
                 border.width: 1
                 visible: Theme.matugenAvailable
 
@@ -927,15 +910,15 @@ Item {
         showHiddenFiles: true
 
         function selectCustomTheme() {
-            shouldBeVisible = true
+            shouldBeVisible = true;
         }
 
-        onFileSelected: function(filePath) {
+        onFileSelected: function (filePath) {
             // Save the custom theme file path and switch to custom theme
             if (filePath.endsWith(".json")) {
-                SettingsData.setCustomThemeFile(filePath)
-                Theme.switchTheme("custom")
-                close()
+                SettingsData.setCustomThemeFile(filePath);
+                Theme.switchTheme("custom");
+                close();
             }
         }
     }

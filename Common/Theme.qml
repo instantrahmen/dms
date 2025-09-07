@@ -193,6 +193,13 @@ Singleton {
         generateSystemThemesFromCurrentTheme();
     }
 
+    function switchCurrentScheme(schemeName, savePrefs = true) {
+        SettingsData.setCurrentScheme(schemeName);
+
+        // Regenerate theme
+        switchTheme(currentTheme, false);
+    }
+
     function setLightMode(light, savePrefs = true) {
         isLightMode = light;
         if (savePrefs && typeof SessionData !== "undefined")

@@ -281,6 +281,7 @@ Singleton {
     function saveSettings() {
         settingsFile.setText(JSON.stringify({
             "currentThemeName": currentThemeName,
+            "currentScheme": currentScheme,
             "customThemeFile": customThemeFile,
             "currentScheme": currentScheme,
             "topBarTransparency": topBarTransparency,
@@ -363,6 +364,11 @@ Singleton {
             "notificationTimeoutCritical": notificationTimeoutCritical,
             "screenPreferences": screenPreferences
         }, null, 2));
+    }
+
+    function setCurrentScheme(schemeName) {
+        currentScheme = schemeName;
+        saveSettings();
     }
 
     function setShowWorkspaceIndex(enabled) {
