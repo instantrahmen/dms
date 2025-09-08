@@ -11,3 +11,44 @@ output_path = '~/.config/gtk-4.0/dank-colors.css'
 [templates.kcolorscheme]
 input_path = './matugen/templates/matugen-kcolorscheme.colors'
 output_path = '~/.local/share/color-schemes/DankMatugen.colors'
+
+[templates.btop]
+input_path = '~/.config/matugen/templates/btop.theme'
+output_path = '~/.config/btop/themes/matugen.theme'
+
+[templates.yazi]
+input_path = '~/.config/matugen/templates/yazi-theme.toml'
+output_path = '~/.config/yazi/theme.toml'
+
+# [templates.spicetify]
+#   input_path  = '~/.config/matugen/templates/spotify.ini'
+#   output_path = '~/.config/spicetify/Themes/marketplace/color.ini'
+
+# [templates.neovim-nvchad]
+#   input_path  = '~/.config/matugen/templates/nvchad/nvchad.lua'
+#   output_path = '~/.local/share/nvim/lazy/base46/lua/base46/themes/matugen.lua'
+
+# [templates.neovim-nvchad-colors]
+#   input_path  = '~/.config/matugen/templates/nvchad/colors-nvchad.txt'
+#   output_path = '~/.cache/wal/colors'
+
+[templates.vesktop]
+input_path = "~/.config/matugen/templates/midnight-discord.css"
+output_path = "~/.config/vesktop/themes/Matugen.css"
+
+[templates.vscode]
+input_path = '~/.config/matugen/templates/vscode-color-theme.json'
+output_path = '~/.vscode/extensions/theme-material-you/themes/vscode.json'
+post_hook = 'cp ~/.config/matugen/other/vscode-package.json ~/.vscode/extensions/theme-material-you/package.json'
+
+[templates.zellij]
+input_path = '~/.config/matugen/templates/zellij-colors.kdl'
+output_path = '~/.config/zellij/themes/matugen.kdl'
+
+[templates.zen-chrome]
+input_path = '~/.config/matugen/templates/zen/userChrome.css.tpl'
+output_path = '/home/erika/.zen/35k7g1yt.Default (release)/chrome/userChrome.css'
+
+[templates.zen-content]
+input_path = '~/.config/matugen/templates/zen/userContent.css.tpl'
+output_path = '/home/erika/.zen/35k7g1yt.Default (release)/chrome/userContent.css'
